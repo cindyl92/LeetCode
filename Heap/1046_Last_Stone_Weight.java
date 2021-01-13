@@ -29,27 +29,29 @@ class Solution {
         if (stones == null || stones.length == 0) return 0;
         if (stones.length == 1) return stones[0];
         
-        // sort the array in ascending order
-        Arrays.sort(stones);
+        int x = 0, y = 0;
         
-        // points to the last element of stones
-        int n = stones.length - 1;
+        // Use max-heap
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<Integer>(Collections.reverseOrder());
         
-        for (int i=0; i < n; i++) {
-            // always compare the last two elements because the array is sorted
-            if (stones[n] == stones[n-1]) {
-                stones[n] = 0;
-                stones[n-1] = 0;
-                i++;
-                
-            } else {
-                stones[n-1] = stones[n] - stones[n-1];
-                stones[n] = 0;
-            }
+        for (int s: stones)
+            maxHeap.add(s);
+        
+        Iterator iterator = maxHeap.iterator();
+        
+        while (iterator.hasNext()) 
+        {
+            x = maxHeap.poll();
+            //System.out.println("x = "+x);
             
-            Arrays.sort(stones);
+            if (iterator.hasNext()) 
+            {
+                y = maxHeap.poll();
+                //System.out.println("y = "+y);
+                int remainder = x - y;   
+                maxHeap.add(remainder);
+            }
         }
-        
-        return stones[n];
+        return x;
     }
 }
