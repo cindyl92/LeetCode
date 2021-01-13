@@ -33,27 +33,32 @@ At most 104 calls will be made to add.
 It is guaranteed that there will be at least k elements in the array when you search for the kth element.
 */
 
-import java.util.ArrayList;
+import java.util.*;
 
 class KthLargest {
 
     private int k;
-    private ArrayList<Integer> numStream;
+    private PriorityQueue<Integer> minHeap = new PriorityQueue<>();
     
     public KthLargest(int k, int[] nums) {
+        // initialize
         this.k = k;
-        numStream = new ArrayList<Integer>();
-        for (int i=0; i<nums.length; i++)
-            numStream.add(nums[i]);
+        for (int n : nums)
+            add(n);
     }
     
     public int add(int val) {
-        //replace the min value of the array
-        numStream.add(val);
-        Collections.sort(numStream);
-        // return kth Largest
-        //return nums[nums.length-k];
-        return numStream.get(numStream.size()-k);
+        // add value :
+        //      1) when heap size is smaller than k
+        //      or 2) when val is larger than the minimum value of the heap
+    	if (minHeap.size() < k || val > minHeap.peek())
+    		minHeap.add(val);
+    	
+        // remove the min value when the size exceeds k
+    	if (minHeap.size() > k)
+    		minHeap.poll();
+        
+        return minHeap.peek();
     }
 }
 
